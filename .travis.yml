@@ -7,12 +7,12 @@ install:
   - bash miniconda.sh -b -p $HOME/miniconda
   - conda install -y -c conda-forge python=${PYTHONVER} jinja2 requests
 script:
-  - python run.py --username jan-janssen --token $GH_TOKEN 
+  - python run.py --username jan-janssen --token $BEARER 
   - mkdir public
   - cp index.html public/index.html
 deploy:
   - provider: pages
-    github_token: $GH_TOKEN
+    token: $GH_TOKEN
     local_dir: public
     on:
       branch: master
