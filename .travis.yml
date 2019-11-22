@@ -8,7 +8,6 @@ install:
   - conda install -y -c conda-forge python=${PYTHONVER} jinja2 requests
 script:
   - python run.py --username jan-janssen --token $BEARER 
-  - mkdir public
   - cp index.html public/index.html
 deploy:
   - provider: pages
