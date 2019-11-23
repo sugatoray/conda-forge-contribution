@@ -10,3 +10,5 @@ USERNAME = <your Github username>
 GH_TOKEN = <your Github token which allows travis to push to this repository>
 BEARER = <your Github API token>
 ```
+
+Designed by [colorlib](https://colorlib.com/wp/template/responsive-table-v2/).
