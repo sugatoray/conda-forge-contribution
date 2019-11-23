@@ -7,7 +7,7 @@ install:
   - bash miniconda.sh -b -p $HOME/miniconda
   - conda install -y -c conda-forge python=${PYTHONVER} jinja2 requests
 script:
-  - python run.py --username jan-janssen --token $BEARER 
+  - python run.py --username $USERNAME --token $BEARER 
   - cp index.html public/index.html
 deploy:
   - provider: pages
