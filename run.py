@@ -56,7 +56,7 @@ def read_template(file):
 
 def write_index(file, output):
     with open(file, 'w') as f: 
-        f.writelines(web_output)
+        f.writelines(output)
 
 
 def command_line(argv):
