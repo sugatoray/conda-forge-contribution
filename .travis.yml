@@ -9,6 +9,8 @@ install:
 script:
   - python run.py --username $USERNAME --token $BEARER 
   - cp index.html public/index.html
+  - cp README.md public/README.md
+  - cat packages.md >> public/README.md 
 deploy:
   - provider: pages
     token: $GH_TOKEN

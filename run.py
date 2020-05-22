@@ -49,13 +49,13 @@ def get_all_package_names(username, token):
     return packages_lst
 
 
-def read_template():
-    with open('template.html', 'r') as f:
+def read_template(file):
+    with open(file, 'r') as f:
         return f.read()
 
 
-def write_index(web_output):
-    with open('index.html', 'w') as f: 
+def write_index(file, output):
+    with open(file, 'w') as f: 
         f.writelines(web_output)
 
 
@@ -78,9 +78,12 @@ def command_line(argv):
         elif opt in ("-t", "--token"):
             token = arg
     total_packages = get_all_package_names(username=username, token="bearer "+token)
-    web = Template(read_template())
+    web = Template(read_template(file="template.html"))
     web_output = web.render(package_lst=total_packages)
-    write_index(web_output=web_output)
+    write_index(file="index.html", output=web_output)
+    md = Template(read_template(file="template.md"))
+    md_output = md.render(package_lst=total_packages)
+    write_index(file="packages.md", output=md_output)
 
 
 if __name__ == "__main__":
