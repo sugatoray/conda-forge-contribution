@@ -1,4 +1,6 @@
 # conda-forge-contribution
+[![Build Status](https://travis-ci.com/jan-janssen/conda-forge-contribution.svg?branch=master)](https://travis-ci.com/jan-janssen/conda-forge-contribution)
+
 This repository allows you to quickly generate a list of all your [conda-forge](https://conda-forge.org) contributions.
 
 For example the contributions of [jan-janssen](https://github.com/jan-janssen) are available at [https://jan-janssen.github.io/conda-forge-contribution/](https://jan-janssen.github.io/conda-forge-contribution/).
