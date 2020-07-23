@@ -9,7 +9,7 @@ To generate your own contribution-list, simply fork this repository and set the 
 
 ```
 USERNAME = <your Github username>
-GH_TOKEN = <your Github token which allows travis to push to this repository>
+GH_TOKEN = <your Github token which enables access to public_repo and read:org>
 ```
 
 For the token the following permissions are required:
