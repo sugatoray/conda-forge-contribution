@@ -10,7 +10,9 @@ To generate your own contribution-list, simply fork this repository and set the 
 ```
 USERNAME = <your Github username>
 GH_TOKEN = <your Github token which allows travis to push to this repository>
-BEARER = <your Github API token>
 ```
+
+For the token the following permissions are required:
+![Required Permissions](permissions.png)
 
 Designed by [colorlib](https://colorlib.com/wp/template/responsive-table-v2/).
