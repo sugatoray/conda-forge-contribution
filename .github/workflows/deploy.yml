@@ -24,7 +24,7 @@ jobs:
     - name: Setup
       shell: bash -l {0}
       run: |
-        conda install jinja2 request
+        conda install jinja2 requests
     - name: Build
       shell: bash -l {0}
       run: |
