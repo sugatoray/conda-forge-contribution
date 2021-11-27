@@ -61,32 +61,37 @@ def write_index(file, output):
         f.writelines(output)
 
 
-def command_line(argv):
-    username = None
-    token = None
-    try:
-        opts, args = getopt.getopt(
-            argv, "u:t:h", ["username=", "token=", "help"]
-        )
-    except getopt.GetoptError:
-        print("run.py -u <username> -t <token>")
-        sys.exit()
-    for opt, arg in opts:
-        if opt in ("-h", "--help"):
-            print("run.py -u <username> -t <token>")
-            sys.exit()
-        elif opt in ("-u", "--username"):
-            username = arg
-        elif opt in ("-t", "--token"):
-            token = arg
-    total_packages = get_all_package_names(username=username, token="bearer "+token)
+def write_files(total_packages):
     web = Template(read_template(file="template.html"))
     web_output = web.render(package_lst=total_packages)
     write_index(file="index.html", output=web_output)
     md = Template(read_template(file="template.md"))
     md_output = md.render(package_lst=total_packages)
     write_index(file="packages.md", output=md_output)
-    return total_packages
+
+
+def command_line(argv):
+    username = None
+    token = None
+    repo = None
+    try:
+        opts, args = getopt.getopt(
+            argv[1:], "u:t:g:h", ["username=", "token=", "githubrepo=", "help"]
+        )
+    except getopt.GetoptError:
+        print("run.py -u <username> -t <token> -g <githubrepo>")
+        sys.exit()
+    for opt, arg in opts:
+        if opt in ("-h", "--help"):
+            print("run.py -u <username> -t <token> -g <githubrepo>")
+            sys.exit()
+        elif opt in ("-u", "--username"):
+            username = arg
+        elif opt in ("-t", "--token"):
+            token = arg
+        elif opt in ("-g", "--githubrepo"):
+            repo = arg 
+    return username, token, repo
 
 
 def get_download_count_line(content_lst):
@@ -125,9 +130,13 @@ def update(package_lst, data_download):
 
 
 if __name__ == "__main__":
-    package_lst = command_line(sys.argv[1:])
+    username, token, repo = command_line(sys.argv)
+    package_lst = get_all_package_names(username=username, token="bearer "+token)
+    write_files(total_packages=package_lst)
+    username, reponame = repo.split("/")
+    github_repo_pages_url = "http://" + username + ".github.io/" + reponame + "/stats.csv"
     df = update(
         package_lst=package_lst,
-        data_download="http://jan-janssen.com/conda-forge-contribution/stats.csv"
+        data_download=github_repo_pages_url
     )
     df.to_csv("stats.csv")
