@@ -127,7 +127,7 @@ def update(package_lst, data_download):
 if __name__ == "__main__":
     package_lst = command_line(sys.argv[1:])
     df = update(
-        package_lst=package_lst
+        package_lst=package_lst,
         data_download="http://jan-janssen.com/conda-forge-contribution/stats.csv"
     )
     df.to_csv("stats.csv")
