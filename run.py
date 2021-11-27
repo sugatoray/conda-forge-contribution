@@ -100,6 +100,11 @@ def get_download_count_line(content_lst):
             return int(l.split(">")[1].split("<")[0])
 
 
+def get_github_stats_url(repo, filename):
+    username, reponame = repo.split("/")
+    return "http://" + username + ".github.io/" + reponame + "/" + filename
+    
+
 def get_package_download_count(package_name):
     r = requests.get('https://anaconda.org/conda-forge/' + package_name)
     return get_download_count_line(content_lst=r.content.decode().split("\n"))
@@ -123,20 +128,20 @@ def download_existing_data(data_download):
     return pandas.read_csv(data_download, index_col=0)
 
 
-def update(package_lst, data_download):
+def get_statistics(package_lst, repo, filename):
+    data_download = get_github_stats_url(repo=repo, filename=filename)
     df_new = get_condaforge_contribution(package_lst=package_lst)
     df_old = download_existing_data(data_download=data_download)
-    return df_old.append(df_new, sort=False)
+    df_merge = df_old.append(df_new, sort=False)
+    df_merge.to_csv(filename)
 
 
 if __name__ == "__main__":
     username, token, repo = command_line(sys.argv)
     package_lst = get_all_package_names(username=username, token="bearer "+token)
     write_files(total_packages=package_lst)
-    username, reponame = repo.split("/")
-    github_repo_pages_url = "http://" + username + ".github.io/" + reponame + "/stats.csv"
-    df = update(
+    get_statistics(
         package_lst=package_lst,
-        data_download=github_repo_pages_url
+        repo=repo,
+        filename="stats.csv"
     )
-    df.to_csv("stats.csv")
