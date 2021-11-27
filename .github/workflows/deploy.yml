@@ -31,6 +31,7 @@ jobs:
       shell: bash -l {0}
       run: |
         python run.py --username ${{ github.actor }} --token ${{ secrets.GH_TOKEN }}
+        cp stats.csv public/stats.csv
         cp permissions.png public/permissions.png
         cp index.html public/index.html
         cp README.md public/README.md
