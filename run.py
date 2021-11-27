@@ -1,6 +1,8 @@
 import sys
 import getopt
 import requests
+import pandas
+from datetime import date
 from jinja2 import Template
 
 
@@ -84,7 +86,48 @@ def command_line(argv):
     md = Template(read_template(file="template.md"))
     md_output = md.render(package_lst=total_packages)
     write_index(file="packages.md", output=md_output)
+    return total_packages
+
+
+def get_download_count_line(content_lst):
+    for i, l in enumerate(content_lst):
+        if "total downloads" in l:
+            return int(l.split(">")[1].split("<")[0])
+
+
+def get_package_download_count(package_name):
+    r = requests.get('https://anaconda.org/conda-forge/' + package_name)
+    return get_download_count_line(content_lst=r.content.decode().split("\n"))
+
+
+def get_condaforge_contribution(package_lst):
+    download_count_lst = [get_package_download_count(package_name=p) for p in package_lst]
+    
+    # Sum number of downloads 
+    package_lst.append("sum")
+    download_count_lst.append(sum(download_count_lst))
+    
+    # Prepend date 
+    package_lst.insert(0, "Date")
+    download_count_lst.insert(0, date.today().strftime("%Y/%m/%d"))
+    
+    return pandas.DataFrame({p:[d] for p, d in zip(package_lst, download_count_lst)})
+
+
+def download_existing_data(data_download):
+    return pandas.read_csv(data_download, index_col=0)
+
+
+def update(package_lst, data_download):
+    df_new = get_condaforge_contribution(package_lst=package_lst)
+    df_old = download_existing_data(data_download=data_download)
+    return df_old.append(df_new, sort=False)
 
 
 if __name__ == "__main__":
-    command_line(sys.argv[1:])
+    package_lst = command_line(sys.argv[1:])
+    df = update(
+        package_lst=package_lst
+        data_download="http://jan-janssen.com/conda-forge-contribution/stats.csv"
+    )
+    df.to_csv("stats.csv")
