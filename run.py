@@ -113,6 +113,10 @@ def get_package_download_count(package_name):
 def get_condaforge_contribution(package_lst):
     download_count_lst = [get_package_download_count(package_name=p) for p in package_lst]
     
+    # Number of packages
+    package_lst.append("number")
+    download_count_lst.append(len(package_lst))
+    
     # Sum number of downloads 
     package_lst.append("sum")
     download_count_lst.append(sum(download_count_lst))
